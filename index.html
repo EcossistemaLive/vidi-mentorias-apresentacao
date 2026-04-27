@@ -1,0 +1,343 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ViDi — Módulos e Mentorias</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#C9A84C;--dark:#0A0A0A;--dark2:#111;--text:#E8E0D0;--muted:#888}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif}
+.slide{width:100vw;height:100vh;height:100dvh;overflow:hidden;scroll-snap-align:start;display:flex;flex-direction:column;position:relative}
+.nav{position:fixed;right:2rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:.75rem;z-index:100}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(201,168,76,.3);cursor:pointer;transition:.3s}
+.dot.active{background:var(--gold);transform:scale(1.4)}
+.progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:200;transition:width .4s}
+/* SLIDE 1 - COVER */
+.s1{background:var(--dark);justify-content:center;align-items:center;text-align:center}
+.s1::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(201,168,76,.08) 0%,transparent 70%)}
+.s1 .tag{font-size:clamp(.7rem,1.5vw,.85rem);letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;opacity:.8}
+.s1 h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,7vw,6rem);font-weight:900;line-height:1.05;margin-bottom:1.5rem}
+.s1 h1 span{color:var(--gold)}
+.s1 p{font-size:clamp(.9rem,2vw,1.2rem);color:var(--muted);max-width:50ch;margin:0 auto}
+.line{width:60px;height:2px;background:var(--gold);margin:2rem auto}
+/* SLIDE 2 - PILARES */
+.s2{background:var(--dark2);justify-content:center;padding:clamp(2rem,6vw,5rem)}
+.s2 .header{margin-bottom:clamp(1.5rem,4vh,3rem)}
+.badge{display:inline-block;padding:.4rem 1.2rem;border:1px solid var(--gold);border-radius:2rem;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.s2 h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3.5rem);font-weight:700}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,2vw,2rem);max-width:900px}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:clamp(1.2rem,3vw,2.5rem)}
+.card .icon{font-size:2rem;margin-bottom:1rem}
+.card h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,2vw,1.4rem);color:var(--gold);margin-bottom:.75rem}
+.card p{font-size:clamp(.75rem,1.3vw,.95rem);color:var(--muted);line-height:1.6}
+/* SLIDE 3 - JORNADA */
+.s3{background:var(--dark);justify-content:center;align-items:center;padding:clamp(2rem,5vw,4rem)}
+.s3 h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);text-align:center;margin-bottom:clamp(1.5rem,4vh,3rem)}
+.journey{display:flex;align-items:center;gap:0;max-width:1000px;width:100%}
+.jstep{flex:1;text-align:center;position:relative}
+.jstep:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:1.2rem;z-index:1}
+.jbox{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:clamp(.7rem,1.5vw,1.2rem);margin:0 4px}
+.jbox .price{font-size:clamp(.6rem,1vw,.75rem);color:var(--gold);font-weight:500;margin-bottom:.3rem}
+.jbox .name{font-size:clamp(.6rem,1.1vw,.8rem);color:var(--text);font-weight:500;line-height:1.3}
+.jbox.highlight{background:rgba(201,168,76,.15);border-color:var(--gold)}
+/* SLIDE 4 - MENTORIA LIDERANÇA */
+.s4{background:var(--dark2);justify-content:center;padding:clamp(2rem,5vw,4rem)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,4rem);align-items:start;max-width:1100px;margin:0 auto;width:100%}
+.col-info .mentor{font-size:clamp(.75rem,1.2vw,.9rem);color:var(--muted);margin-bottom:.5rem}
+.col-info h2{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3.5vw,2.8rem);line-height:1.1;margin-bottom:1rem}
+.col-info .tagline{font-size:clamp(.8rem,1.4vw,1rem);color:var(--muted);line-height:1.6;margin-bottom:1.5rem;font-style:italic}
+.ticket{background:rgba(201,168,76,.1);border:1px solid var(--gold);border-radius:8px;padding:.8rem 1.2rem;display:inline-block}
+.ticket span{font-size:clamp(.65rem,1vw,.8rem);color:var(--gold);text-transform:uppercase;letter-spacing:.1em;display:block}
+.ticket strong{font-size:clamp(1rem,2vw,1.5rem);color:var(--text)}
+.modules{display:flex;flex-direction:column;gap:1rem}
+.mod{border-left:3px solid var(--gold);padding-left:1.2rem}
+.mod h4{font-size:clamp(.8rem,1.4vw,1rem);color:var(--gold);margin-bottom:.4rem}
+.mod ul{list-style:none;display:flex;flex-direction:column;gap:.25rem}
+.mod ul li{font-size:clamp(.65rem,1.1vw,.82rem);color:var(--muted);line-height:1.4}
+.mod ul li::before{content:'›';color:var(--gold);margin-right:.4rem}
+/* SLIDE 5 - MENTORIA CEO */
+.s5{background:var(--dark);justify-content:center;align-items:center;padding:clamp(2rem,5vw,4rem)}
+.s5 .inner{max-width:900px;width:100%;text-align:center}
+.s5 .badge2{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.4);border-radius:4px;padding:.3rem .9rem;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:inline-block;margin-bottom:1.2rem}
+.s5 h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,4rem);margin-bottom:.5rem}
+.s5 .sub{font-size:clamp(.85rem,1.5vw,1.1rem);color:var(--muted);margin-bottom:2rem}
+.ibcred{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;gap:2rem}
+.ibcred .stat{text-align:center}
+.ibcred .stat .num{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.5rem);color:var(--gold);font-weight:700;display:block}
+.ibcred .stat .lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.ibcred .divider{width:1px;height:60px;background:rgba(201,168,76,.2)}
+.s5 .features{display:grid;grid-template-columns:1fr 1fr;gap:1rem;text-align:left}
+.s5 .feat{display:flex;align-items:flex-start;gap:.75rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:.9rem}
+.s5 .feat .dot2{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:.3rem}
+.s5 .feat p{font-size:clamp(.7rem,1.2vw,.85rem);color:var(--muted);line-height:1.5}
+/* SLIDE 6 - OUTROS PRODUTOS */
+.s6{background:var(--dark2);justify-content:center;padding:clamp(2rem,5vw,4rem)}
+.s6 h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);margin-bottom:clamp(1rem,3vh,2.5rem)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:1000px}
+.pcard{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1.2rem;transition:.3s}
+.pcard:hover{border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.04)}
+.pcard .ptag{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.pcard h4{font-family:'Playfair Display',serif;font-size:clamp(.9rem,1.6vw,1.1rem);margin-bottom:.5rem}
+.pcard p{font-size:clamp(.65rem,1vw,.78rem);color:var(--muted);line-height:1.5}
+/* SLIDE 7 - ENCERRAMENTO */
+.s7{background:var(--dark);justify-content:center;align-items:center;text-align:center}
+.s7::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(201,168,76,.06) 0%,transparent 70%)}
+.s7 .big{font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,8rem);font-weight:900;color:var(--gold);line-height:1;position:relative}
+.s7 h3{font-size:clamp(1rem,2.5vw,1.8rem);margin:1rem 0;color:var(--text)}
+.s7 p{font-size:clamp(.8rem,1.5vw,1rem);color:var(--muted);max-width:45ch;margin:0 auto}
+/* ANIMATIONS */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.slide.visible .reveal{opacity:1;transform:none}
+.slide.visible .reveal:nth-child(1){transition-delay:.05s}
+.slide.visible .reveal:nth-child(2){transition-delay:.15s}
+.slide.visible .reveal:nth-child(3){transition-delay:.25s}
+.slide.visible .reveal:nth-child(4){transition-delay:.35s}
+.slide.visible .reveal:nth-child(5){transition-delay:.45s}
+.slide.visible .reveal:nth-child(6){transition-delay:.55s}
+@media(max-width:700px){.two-col,.cards,.s5 .features,.pgrid{grid-template-columns:1fr}.journey{flex-direction:column}.jstep:not(:last-child)::after{content:'↓';right:auto;bottom:-12px;top:auto;left:50%;transform:translateX(-50%)}.ibcred{flex-direction:column;gap:1rem}.ibcred .divider{width:60px;height:1px}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<nav class="nav" id="nav"></nav>
+
+<!-- SLIDE 1: CAPA -->
+<section class="slide s1" id="s0">
+<div class="tag reveal">ViDi / Ecossistema Live · Abril 2026</div>
+<h1 class="reveal">Módulos &amp; <span>Mentorias</span></h1>
+<div class="line reveal"></div>
+<p class="reveal">Estrutura completa dos produtos de desenvolvimento de liderança executiva e formação de CEOs da ViDi</p>
+</section>
+
+<!-- SLIDE 2: PILARES -->
+<section class="slide s2" id="s1">
+<div class="header">
+<div class="badge reveal">Fundação</div>
+<h2 class="reveal">Os 2 Pilares Mestres</h2>
+</div>
+<div class="cards">
+<div class="card reveal">
+<div class="icon">🧭</div>
+<h3>Liderança</h3>
+<p>Formação do ser humano como líder — identidade, decisão, presença e gestão de si e dos outros. Conduzido por Luiz Portal com mais de 20 anos em operações reais.</p>
+</div>
+<div class="card reveal">
+<div class="icon">🏗️</div>
+<h3>CEO</h3>
+<p>Formação do gestor de empresa — processos, crescimento, governança, saída do operacional. Conduzido por Ibrahim Boufleur (R$80k → R$180M de faturamento).</p>
+</div>
+</div>
+</section>
+
+<!-- SLIDE 3: JORNADA LTV -->
+<section class="slide s3" id="s2">
+<h2 class="reveal">Jornada <span style="color:var(--gold)">LTV</span> Completa</h2>
+<div class="journey reveal">
+<div class="jstep">
+<div class="jbox">
+<div class="price">R$ 698</div>
+<div class="name">Curso Online Liderança</div>
+</div>
+</div>
+<div class="jstep">
+<div class="jbox">
+<div class="price">R$ 1.497</div>
+<div class="name">Cúpula CEO<br>Ingresso</div>
+</div>
+</div>
+<div class="jstep">
+<div class="jbox">
+<div class="price">+ R$ 7.997</div>
+<div class="name">Cúpula<br>Dinner VIP</div>
+</div>
+</div>
+<div class="jstep">
+<div class="jbox highlight">
+<div class="price">R$ 39.997</div>
+<div class="name">Mentoria<br>Liderança</div>
+</div>
+</div>
+<div class="jstep">
+<div class="jbox highlight">
+<div class="price">R$ 100.000</div>
+<div class="name">Mentoria<br>CEO</div>
+</div>
+</div>
+<div class="jstep">
+<div class="jbox">
+<div class="price">Sob consulta</div>
+<div class="name">Equity &amp;<br>Exit Strategy</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SLIDE 4: MENTORIA LIDERANÇA ANTIFRÁGIL -->
+<section class="slide s4" id="s3">
+<div class="two-col">
+<div class="col-info">
+<div class="mentor reveal">Luiz Portal · Alto Ticket / Grupo</div>
+<h2 class="reveal">O Código da<br><span style="color:var(--gold)">Nova Liderança</span></h2>
+<p class="tagline reveal">"O mundo não precisa de mais líderes inspiradores. Precisa de líderes que não quebram quando o caos chega."</p>
+<div class="ticket reveal">
+<span>Investimento</span>
+<strong>R$ 39.997</strong>
+</div>
+</div>
+<div class="modules">
+<div class="mod reveal">
+<h4>Módulo 1 — Conceitos Fundamentais</h4>
+<ul>
+<li>Por que resiliência não é suficiente</li>
+<li>Antifragilidade de Taleb aplicada à liderança</li>
+<li>Adaptabilidade vs. rendição</li>
+<li>O ciclo que destrói organizações</li>
+<li>Propósito como motor real das decisões</li>
+</ul>
+</div>
+<div class="mod reveal">
+<h4>Módulo 2 — Perfis e Estilos</h4>
+<ul>
+<li>Os 4 temperamentos sob pressão e mudança</li>
+<li>Perfis comportamentais na prática</li>
+<li>Os 6 estilos de liderança de Goleman</li>
+<li>Qual estilo usar em crise</li>
+<li>Liderando maturidades diferentes no mesmo time</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SLIDE 5: MENTORIA CEO -->
+<section class="slide s5" id="s4">
+<div class="inner">
+<div class="badge2 reveal">Em definição · 10 de 14 encontros a selecionar</div>
+<h2 class="reveal">Mentoria <span style="color:var(--gold)">CEO</span></h2>
+<p class="sub reveal">Ibrahim Boufleur · R$ 100.000 · Alto Ticket Individual</p>
+<div class="ibcred reveal">
+<div class="stat">
+<span class="num">R$80k</span>
+<span class="lbl">Ponto de partida</span>
+</div>
+<div class="divider"></div>
+<div class="stat">
+<span class="num">R$180M</span>
+<span class="lbl">Faturamento atingido</span>
+</div>
+<div class="divider"></div>
+<div class="stat">
+<span class="num">20+</span>
+<span class="lbl">Anos de operação real</span>
+</div>
+<div class="divider"></div>
+<div class="stat">
+<span class="num">R$2,5M+</span>
+<span class="lbl">Faturamento mínimo do perfil</span>
+</div>
+</div>
+<div class="features reveal">
+<div class="feat"><div class="dot2"></div><p>Estruturar a empresa para escalar sem depender do dono</p></div>
+<div class="feat"><div class="dot2"></div><p>Governança e sucessão prática com conselho consultivo</p></div>
+<div class="feat"><div class="dot2"></div><p>Tomada de decisão estratégica em empresas de escala</p></div>
+<div class="feat"><div class="dot2"></div><p>Saída do operacional com segurança e continuidade</p></div>
+</div>
+</div>
+</section>
+
+<!-- SLIDE 6: OUTROS PRODUTOS -->
+<section class="slide s6" id="s5">
+<h2 class="reveal">Ecossistema <span style="color:var(--gold)">Completo</span></h2>
+<div class="pgrid">
+<div class="pcard reveal">
+<div class="ptag">Digital · Entrada</div>
+<h4>Formação do Líder</h4>
+<p>Curso online gravado. Vendido automaticamente pelo Bot Júlio. Porta de entrada para a jornada ViDi.</p>
+</div>
+<div class="pcard reveal">
+<div class="ptag">Digital · Entrada</div>
+<h4>Formação do CEO</h4>
+<p>Curso online gravado. Complementar ao Formação do Líder. Foco em estrutura e gestão empresarial.</p>
+</div>
+<div class="pcard reveal">
+<div class="ptag">Evento · R$1.497</div>
+<h4>Cúpula CEO 2026</h4>
+<p>20 ago 2026 · Royal Tulip Brasília. Imersão de 1 dia para CEOs com empresas R$1M–R$50M.</p>
+</div>
+<div class="pcard reveal">
+<div class="ptag">Presencial</div>
+<h4>Formações &amp; Imersões</h4>
+<p>Formação Presencial de Líderes e CEOs. Oficinas técnicas e imersões intensivas de 1 a 3 dias.</p>
+</div>
+<div class="pcard reveal">
+<div class="ptag">Sob consulta</div>
+<h4>Consultoria ViDi</h4>
+<p>Diagnóstico real da empresa e entrega do que precisa ser feito. Envolve Luiz e Ibrahim conforme o projeto.</p>
+</div>
+<div class="pcard reveal">
+<div class="ptag">Diagnóstico · R$297</div>
+<h4>Diagnóstico Catalyst</h4>
+<p>Sessão de 30–45 min. Mapeamento de dor. Upsell estratégico no evento. Pode ser analisado ao vivo no palco.</p>
+</div>
+</div>
+</section>
+
+<!-- SLIDE 7: FIM -->
+<section class="slide s7" id="s6">
+<div class="big reveal">ViDi</div>
+<h3 class="reveal">Transformar chefes em líderes</h3>
+<div class="line reveal"></div>
+<p class="reveal">O principal ecossistema de referência em desenvolvimento de liderança executiva e formação de CEOs no Brasil</p>
+</section>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const nav=document.getElementById('nav');
+const progress=document.getElementById('progress');
+let current=0;
+
+// Nav dots
+slides.forEach((_,i)=>{
+const d=document.createElement('div');
+d.className='dot'+(i===0?' active':'');
+d.onclick=()=>slides[i].scrollIntoView({behavior:'smooth'});
+nav.appendChild(d);
+});
+
+// Intersection Observer
+const obs=new IntersectionObserver(entries=>{
+entries.forEach(e=>{
+if(e.isIntersecting){
+e.target.classList.add('visible');
+const idx=[...slides].indexOf(e.target);
+current=idx;
+document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+progress.style.width=((idx+1)/slides.length*100)+'%';
+}
+});
+},{threshold:.5});
+slides.forEach(s=>obs.observe(s));
+
+// Keyboard
+document.addEventListener('keydown',e=>{
+if(e.key==='ArrowDown'||e.key===' '||e.key==='PageDown'){e.preventDefault();if(current<slides.length-1)slides[current+1].scrollIntoView({behavior:'smooth'});}
+if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();if(current>0)slides[current-1].scrollIntoView({behavior:'smooth'});}
+});
+
+// Touch
+let ty=0;
+document.addEventListener('touchstart',e=>ty=e.touches[0].clientY,{passive:true});
+document.addEventListener('touchend',e=>{
+const dy=ty-e.changedTouches[0].clientY;
+if(Math.abs(dy)>50){if(dy>0&&current<slides.length-1)slides[current+1].scrollIntoView({behavior:'smooth'});else if(dy<0&&current>0)slides[current-1].scrollIntoView({behavior:'smooth'});}
+},{passive:true});
+
+// First slide visible
+slides[0].classList.add('visible');
+progress.style.width=(1/slides.length*100)+'%';
+</script>
+</body>
+</html>
